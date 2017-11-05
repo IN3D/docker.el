@@ -325,6 +325,10 @@ Remove the volumes associated with the container when VOLUMES is set."
   :actions  '((?F "Copy From" docker-containers-cp-from)
               (?T "Copy To" docker-containers-cp-to-selection)))
 
+(defun docker-containers-mark-exited ()
+  (interactive)
+  (tablist-mark-items-regexp "Status" "Exited"))
+
 (defun docker-containers-refresh ()
   "Refresh the containers list."
   (setq tabulated-list-entries (docker-containers-entries)))
@@ -362,6 +366,7 @@ Remove the volumes associated with the container when VOLUMES is set."
   (setq tabulated-list-format [("Id" 16 t)("Image" 15 t)("Command" 30 t)("Created" 15 t)("Status" 20 t)("Ports" 10 t)("Names" 10 t)])
   (setq tabulated-list-padding 2)
   (setq tabulated-list-sort-key (cons "Image" nil))
+  (define-key tablist-mode-mark-map "s" #'docker-containers-mark-exited)
   (add-hook 'tabulated-list-revert-hook 'docker-containers-refresh nil t)
   (tabulated-list-init-header)
   (tablist-minor-mode))

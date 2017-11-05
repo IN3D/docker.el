@@ -175,6 +175,10 @@ Do not delete untagged parents when NO-PRUNE is set."
   :actions  '((?R "Run images" docker-images-run-selection))
   :default-arguments '("-i" "-t" "--rm"))
 
+(defun docker-images-mark-dangling ()
+  (interactive)
+  (tablist-mark-items-regexp "Tag" "<none>"))
+
 (defun docker-images-refresh ()
   "Refresh the images list."
   (setq tabulated-list-entries (docker-images-entries)))
@@ -203,6 +207,7 @@ Do not delete untagged parents when NO-PRUNE is set."
   (setq tabulated-list-format [("Repository" 30 t)("Tag" 20 t)("Id" 16 t)("Created" 25 t)("Size" 10 t)])
   (setq tabulated-list-padding 2)
   (setq tabulated-list-sort-key (cons "Repository" nil))
+  (define-key tablist-mode-mark-map "u" #'docker-images-mark-dangling)
   (add-hook 'tabulated-list-revert-hook 'docker-images-refresh nil t)
   (tabulated-list-init-header)
   (tablist-minor-mode))
